@@ -1,1 +1,33 @@
-### TODO: Add workflow to run tests on push and pull requests to main
+name: Node.js Tests
+
+# Denna workflow körs vid push till main-branch och när en Pull Request skapas mot main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    # Kör på den senaste Ubuntu-versionen
+    runs-on: ubuntu-latest
+
+    # Definiera stegen för denna job
+    steps:
+      # Checka ut koden från repositoryt
+      - uses: actions/checkout@v3
+      
+      # Sätt upp Node.js miljön
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      # Installera beroenden
+      - name: Install dependencies
+        run: npm ci
+      
+      # Kör tester
+      - name: Run tests
+        run: npm test
